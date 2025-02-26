@@ -3,14 +3,16 @@
     <div class="card">
       <div class="card-body p-4">
         <h3 class="text-center mb-3">Login</h3>
-        <form @submit.prevent="handleLogin">
+        <form @submit.prevent="handleSubmit">
           <div class="mb-3">
             <label class="form-label">Usuário</label>
-            <input type="text" class="form-control" v-model="username" required />
+            <input name="username" autocomplete="username" type="text" class="form-control" v-model="username"
+              required />
           </div>
           <div class="mb-3">
             <label class="form-label">Senha</label>
-            <input type="password" class="form-control" v-model="password" required />
+            <input name="password" autocomplete="password" type="password" class="form-control" v-model="password"
+              required />
           </div>
           <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
@@ -30,7 +32,7 @@ const password = ref('');
 const errorMessage = ref('');
 const router = useRouter();
 
-const handleLogin = async () => {
+const handleSubmit = async () => {
   try {
     await login(username.value, password.value);
     router.push('/');
@@ -41,7 +43,7 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-  .card {
-    width: 400px;
-  }
+.card {
+  width: 400px;
+}
 </style>

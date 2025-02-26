@@ -1,27 +1,10 @@
 <template>
   <div>
-    <h3>Lista de Contatos</h3>
-
-    <div class="mb-3">
-      <input type="text" class="form-control" v-model="termoPesquisa" placeholder="Pesquisar contatos..."
-        @input="searchContatos" />
-    </div>
-
-    <div v-if="contatos.length === 0" class="alert alert-warning">
-      Nenhum contato encontrado.
-    </div>
-
-    <h3 class="mb-4">Favoritos</h3>
-    <div class="row g-3">
-      <div class="col-12 col-lg-3" v-for="contato in contatos" :key="contato.id">
-        <contato-card :contato="contato" :isFavorito="true"></contato-card>
-      </div>
-    </div>
-
     <h3 class="mb-4">Contatos</h3>
+    <search-bar placeholder="Buscar contato..." @search="handleSearch" class="mb-4" />
     <div class="row g-3">
-      <div class="col-12 col-lg-3" v-for="contato in contatos" :key="contato.id">
-        <contato-card :contato="contato"></contato-card>
+      <div class="col-12 col-lg-3" v-for="contato in filteredContacts" :key="contato.id">
+        <contact-card :contact="contato" />
       </div>
     </div>
   </div>
@@ -29,86 +12,33 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { getContatos } from '../services/contatoService';
-import { getFavoritos, salvarFavorito } from '../services/favoritoService';
-import type { Contato } from '../models/Contato';
-import ContatoCard from '../components/ContatoCard.vue';
+import { getContacts } from '../services/contactService';
+import type { Contact } from '../models/Contact';
+import ContactCard from '../components/ContactCard.vue';
+import SearchBar from '../components/SearchBar.vue';
 
-const contatos = ref<Contato[]>([]);
-const favoritos = ref<Contato[]>([]);
+const contacts = ref<Contact[]>([]);
 const termoPesquisa = ref('');
+const filteredContacts = ref<Contact[]>(contacts.value);
 
-async function loadContatos() {
+async function loadContacts() {
   try {
-    const response = await getContatos();
-    contatos.value = response;
+    const response = await getContacts();
+    contacts.value = response;
+    filteredContacts.value = response;
   } catch (error) {
-    console.error('Erro ao carregar contatos:', error);
+    console.error('Erro ao carregar recurso:', error);
   }
-};
+}
 
-async function loadFavoritos() {
-  try {
-    const response = await getFavoritos();
-    favoritos.value = response;
-  } catch (error) {
-    console.error('Erro ao carregar favoritos:', error);
-  }
-};
-
-async function searchContatos() {
-  if (termoPesquisa.value.trim() === '') {
-    loadContatos();
-    return;
-  }
-
-  try {
-    const response = await getContatos(termoPesquisa.value);
-    contatos.value = response;
-  } catch (error) {
-    console.error('Erro na pesquisa:', error);
-  }
-};
-
-async function favoritarContato(contato: any) {
-  try {
-    await salvarFavorito(contato.id);
-    loadFavoritos();
-  } catch (error) {
-    console.error('Erro ao favoritar contato:', error);
-  }
-};
-
-async function removerFavorito(contato: any) {
-  try {
-    await removerFavorito(contato.id);
-    loadFavoritos();
-  } catch (error) {
-    console.error('Erro ao desfavoritar contato:', error);
-  }
-};
-
-function isFavorito(contato: any) {
-  return favoritos.value.some((fav) => fav.id === contato.id);
-};
-
-async function removerContato(id: number) {
-  if (!confirm('Tem certeza que deseja excluir este contato?')) return;
-
-  try {
-    await removerContato(id);
-    contatos.value = contatos.value.filter(c => c.id !== id);
-  } catch (error) {
-    console.error('Erro ao remover contato:', error);
-  }
-};
-
-function getFotoUrl(pessoaId: number) {
-  return `http://seu-servidor.com/api/foto/download/${pessoaId}`;
-};
+function handleSearch(term: string) {
+  termoPesquisa.value = term;
+  filteredContacts.value = contacts.value.filter((contact) =>
+    contact.pessoa.nome.toLowerCase().includes(term.toLowerCase())
+  );
+}
 
 onMounted(() => {
-  loadContatos();
-  loadFavoritos();
+  loadContacts();
 });
 </script>

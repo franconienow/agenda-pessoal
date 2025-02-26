@@ -10,9 +10,7 @@
     </main>
     <footer class="bg-light">
       <div class="container">
-        <div class="text-center text-muted py-4">
-          &copy; {{ currentYear }} - Agenda Pessoal
-        </div>
+        <div class="text-center text-muted py-4">&copy; {{ currentYear }} - Agenda Pessoal</div>
       </div>
     </footer>
   </div>

@@ -1,4 +1,4 @@
-export interface Endereco {
+export interface Address {
   id?: number;
   bairro: string;
   cep: string;
