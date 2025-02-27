@@ -26,19 +26,19 @@ export async function getUserById(userId: number): Promise<any> {
 export async function updatePassword(data: any): Promise<any> {
   try {
     const response = await api.post('/usuario/alterarSenha', data);
-    return response.data;
+    return response;
   } catch (error) {
     console.error('Erro na pesquisa:', error);
     throw new Error('Failed to search contacts');
   }
 }
 
-export async function updateCurrentUser(updatedUser: User): Promise<User> {
+export async function updateCurrentUser(updatedUser: User): Promise<any> {
   try {
     const response = await api.put('/usuario/atualizar', {
       ...updatedUser,
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error('Erro na pesquisa:', error);
     throw new Error('Failed to search contacts');
@@ -48,7 +48,7 @@ export async function updateCurrentUser(updatedUser: User): Promise<User> {
 export async function updateUser(data: any): Promise<any> {
   try {
     const response = await api.post(`/usuario/salvar`, data);
-    return response.data;
+    return response;
   } catch (error) {
     console.error('Erro ao salvar contato:', error);
     throw new Error('Failed to save contact');

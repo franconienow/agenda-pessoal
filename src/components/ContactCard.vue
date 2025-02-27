@@ -2,7 +2,7 @@
   <div
     v-if="contact.id && contact.pessoa.id"
     class="card model-card"
-    :class="{ 'border-primary': isFavorite }"
+    :class="{ 'text-bg-secondary': isFavorite }"
     @click="goToContactSingle(contact.pessoa.id, contact.id)"
   >
     <img :src="photoURL" class="card-img-top" />

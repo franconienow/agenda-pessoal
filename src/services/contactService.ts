@@ -23,19 +23,9 @@ export async function getContactsByPerson(personId: number): Promise<Contact[]> 
   }
 }
 
-export async function getFavoriteContacts(): Promise<Contact[]> {
+export async function removeContact(contactId: number): Promise<any> {
   try {
-    const response = await api.get('/favorito/pesquisar');
-    return response.data;
-  } catch (error) {
-    console.error('Erro na pesquisa:', error);
-    throw new Error('Failed to search');
-  }
-}
-
-export async function deleteContact(contactId: number): Promise<any> {
-  try {
-    await api.delete('/contact/remover/' + contactId);
+    await api.delete('/contato/remover/' + contactId);
   } catch (error) {
     console.error('Erro ao remover recurso:', error);
     throw new Error('Failed to remove');
@@ -44,8 +34,8 @@ export async function deleteContact(contactId: number): Promise<any> {
 
 export async function updateContact(contact: Contact): Promise<any> {
   try {
-    const response = await api.post(`/contact/salvar`, contact);
-    return response.data;
+    const response = await api.post(`/contato/salvar`, contact);
+    return response;
   } catch (error) {
     console.error('Erro ao salvar recurso:', error);
     throw new Error('Failed to save');

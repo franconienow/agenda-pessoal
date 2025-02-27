@@ -12,9 +12,20 @@ import PersonsListView from '../views/person/PersonsListView.vue';
 import ContactsListView from '../views/contact/ContactsListView.vue';
 import ContactView from '../views/contact/ContactView.vue';
 import { isAuthenticated } from '../services/authService';
+import ContactAddView from '../views/contact/ContactAddView.vue';
 
 const routes = [
-  { path: '/login', component: LoginView },
+  {
+    path: '/login',
+    component: LoginView,
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) {
+        next('/');
+      } else {
+        next();
+      }
+    },
+  },
   {
     path: '/',
     component: BaseLayout,
@@ -30,6 +41,7 @@ const routes = [
       { path: 'adicionar-pessoa', component: PersonAddView },
       { path: 'contatos', component: ContactsListView },
       { path: 'pessoas/:personId/contatos/:contactId', component: ContactView },
+      { path: 'adicionar-contato', component: ContactAddView },
     ],
   },
 ];

@@ -8,6 +8,7 @@ export interface Contact {
   tag: string;
   tipoContato?: string;
   privado: boolean;
-  pessoa: Person;
-  usuario: User;
+  pessoa?: Person;
+  usuario?: User;
+  favorite?: boolean;
 }

@@ -8,7 +8,7 @@
         <router-view />
       </div>
     </main>
-    <footer class="bg-light">
+    <footer class="bg-light mt-auto">
       <div class="container">
         <div class="text-center text-muted py-4">&copy; {{ currentYear }} - Agenda Pessoal</div>
       </div>
