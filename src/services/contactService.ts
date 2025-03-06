@@ -25,7 +25,8 @@ export async function getContactsByPerson(personId: number): Promise<Contact[]> 
 
 export async function removeContact(contactId: number): Promise<any> {
   try {
-    await api.delete('/contato/remover/' + contactId);
+    const response = await await api.delete('/contato/remover/' + contactId);
+    return response;
   } catch (error) {
     console.error('Erro ao remover recurso:', error);
     throw new Error('Failed to remove');

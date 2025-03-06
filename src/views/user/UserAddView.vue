@@ -57,9 +57,17 @@
                 </div>
               </div>
               <div class="col-12 col-lg-6">
-                <div class="mb-0">
+                <div class="mb-3">
                   <label class="form-label">Senha</label>
-                  <input type="password" class="form-control" v-model="user.password" />
+                  <input
+                    type="password"
+                    class="form-control"
+                    v-model="user.password"
+                    :class="{ 'is-invalid': !passwordValid }"
+                  />
+                  <div class="invalid-feedback">
+                    Use ao menos 8 caracteres, com letras e números
+                  </div>
                 </div>
               </div>
               <div class="col-12 col-lg-6">
@@ -87,6 +95,7 @@ import { updateUser } from '../../services/userService';
 import { maskPatterns } from '../../composables/useMask';
 import { formatAPIDate, formatDefaultDate } from '../../utils/dateUtils';
 import { useToast } from 'vue-toast-notification';
+import { passwordIsValid } from '../../utils/validationUtils';
 
 const user = ref<User>({
   cpf: '',
@@ -100,6 +109,7 @@ const user = ref<User>({
 });
 const userType = ref<string>();
 const toast = useToast();
+const passwordValid = computed(() => passwordIsValid(user.value.password));
 
 const displayData = computed({
   get: () => (user.value?.dataNascimento ? formatDefaultDate(user.value?.dataNascimento) : ''),
@@ -112,6 +122,10 @@ const displayData = computed({
 
 async function handleUpdate() {
   if (user.value) {
+    if (!passwordIsValid(user.value.password)) {
+      toast.error('A senha deve ter pelo menos 8 caracteres, incluindo letras e números.');
+      return;
+    }
     try {
       const response = await updateUser({
         tipos: [userType.value],

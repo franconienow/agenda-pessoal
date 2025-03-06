@@ -85,8 +85,12 @@
                     type="password"
                     class="form-control"
                     v-model="userUpdatePasswordFields.newPassword"
+                    :class="{ 'is-invalid': !newPasswordValid }"
                     required
                   />
+                  <div class="invalid-feedback">
+                    Use ao menos 8 caracteres, com letras e números
+                  </div>
                 </div>
               </div>
             </div>
@@ -119,6 +123,7 @@ import { getUserById, updateUser, updatePassword } from '../../services/userServ
 import { maskPatterns } from '../../composables/useMask';
 import { formatAPIDate, formatDefaultDate } from '../../utils/dateUtils';
 import { useToast } from 'vue-toast-notification';
+import { passwordIsValid } from '../../utils/validationUtils';
 
 const route = useRoute();
 const user = ref<User>();
@@ -128,6 +133,9 @@ const userUpdatePasswordFields = ref({
   newPassword: '',
 });
 const toast = useToast();
+const newPasswordValid = computed(() =>
+  passwordIsValid(userUpdatePasswordFields.value.newPassword)
+);
 
 const displayData = computed({
   get: () => (user.value?.dataNascimento ? formatDefaultDate(user.value?.dataNascimento) : ''),
@@ -169,6 +177,10 @@ async function handleUpdate() {
 
 async function handlePasswordUpdate() {
   if (user.value) {
+    if (!passwordIsValid(userUpdatePasswordFields.value.newPassword)) {
+      toast.error('A senha deve ter pelo menos 8 caracteres, incluindo letras e números.');
+      return;
+    }
     try {
       const response = await updatePassword({
         username: user.value.username,

@@ -95,7 +95,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import type { Person } from '../../models/Person';
 import { getPersonById, removePerson, updatePerson } from '../../services/personService';
 import { maskPatterns } from '../../composables/useMask';
@@ -104,7 +104,6 @@ import PhotoUpload from '../../components/PhotoUpload.vue';
 import { useToast } from 'vue-toast-notification';
 
 const route = useRoute();
-const router = useRouter();
 const person = ref<Person>();
 const toast = useToast();
 
@@ -137,7 +136,11 @@ async function handleRemove() {
   if (person.value && person.value.id && window.confirm('Remover o registro')) {
     try {
       const response = await removePerson(person.value.id);
-      router.push(`/pessoas`);
+      if (response.status == 200) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       toast.error('Erro na requisição');
       console.error(error);

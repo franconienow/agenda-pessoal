@@ -16,7 +16,7 @@ export async function getPersonById(personId: number): Promise<any> {
 export async function removePerson(personId: number): Promise<any> {
   // Rota está retorando uma exceção do hibernate
   const response = await api.delete('/pessoa/remover/' + personId);
-  return response.data;
+  return response;
 }
 
 export async function updatePerson(updatedPerson: Person): Promise<any> {

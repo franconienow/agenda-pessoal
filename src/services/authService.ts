@@ -1,4 +1,5 @@
 import api from './api';
+import { jwtDecode } from 'jwt-decode';
 
 export async function login(username: string, password: string) {
   const response = await api.post('/auth/login', { username, password });
@@ -26,5 +27,13 @@ export function getUserId() {
 }
 
 export function isAuthenticated() {
-  return !!getToken();
+  const token = getToken();
+  if (!token) return false;
+  try {
+    const decoded: { exp: number } = jwtDecode(token);
+    const currentTime = Math.floor(Date.now() / 1000);
+    return decoded.exp > currentTime;
+  } catch (error) {
+    return false;
+  }
 }

@@ -57,7 +57,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import type { Contact } from '../../models/Contact';
 import { getContactsByPerson, removeContact, updateContact } from '../../services/contactService';
 import { maskPatterns } from '../../composables/useMask';
@@ -65,7 +65,6 @@ import { tiposContato } from '../../composables/useTiposContato';
 import { useToast } from 'vue-toast-notification';
 
 const route = useRoute();
-const router = useRouter();
 const contact = ref<Contact>();
 const toast = useToast();
 
@@ -99,7 +98,11 @@ async function handleRemove() {
   if (contact.value && contact.value.id && window.confirm('Remover o registro')) {
     try {
       const response = await removeContact(contact.value.id);
-      router.push(`/contatos`);
+      if (response.status == 200) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.error('Erro ao remover:', error);
     }

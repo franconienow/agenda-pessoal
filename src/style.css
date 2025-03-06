@@ -1,6 +1,6 @@
 #app {
   min-height: 100vh;
-  font-family: 'Open Sans', serif;
+  font-family: 'Geist', sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
   font-variation-settings: 'wdth' 100;
@@ -15,9 +15,33 @@
 .model-card {
   cursor: pointer;
   height: 100% !important;
+  border: none !important;
+  transition: box-shadow 0.2s ease-in-out;
+  box-shadow:
+    rgba(50, 50, 93, 0.15) 0px 1px 3px -1px,
+    rgba(0, 0, 0, 0.2) 0px 1px 2px -1px;
+}
+
+.model-card:hover {
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.model-card .card-body {
+  transition: transform 0.2s ease-in-out;
+}
+
+.model-card:hover .card-body {
+  transform: translate(2px, -2px);
 }
 
 .model-card img.card-img-top {
-  aspect-ratio: 4/3;
+  aspect-ratio: 4/2;
   object-fit: cover;
+}
+
+.image-placeholder {
+  background-color: #e0e0e0;
+  aspect-ratio: 4/2;
 }

@@ -1,11 +1,12 @@
 <template>
   <div
-    v-if="contact.id && contact.pessoa.id"
+    v-if="contact.id && contact.pessoa && contact.pessoa.id"
     class="card model-card"
     :class="{ 'text-bg-secondary': isFavorite }"
     @click="goToContactSingle(contact.pessoa.id, contact.id)"
   >
-    <img :src="photoURL" class="card-img-top" />
+    <div v-if="!photoURL" class="card-img-top image-placeholder"></div>
+    <img v-if="photoURL" :src="photoURL" class="card-img-top" />
     <div class="card-body">
       <h5 v-if="contact.telefone" class="card-title">{{ contact.telefone }}</h5>
       <h5 v-if="contact.email" class="card-title">{{ contact.email }}</h5>

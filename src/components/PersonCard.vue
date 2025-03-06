@@ -1,6 +1,7 @@
 <template>
   <div v-if="person.id" class="card model-card" @click="goToPersonSingle(person.id)">
-    <img :src="photoURL" class="card-img-top" />
+    <div v-if="!photoURL" class="card-img-top image-placeholder"></div>
+    <img v-if="photoURL" :src="photoURL" class="card-img-top" />
     <div class="card-body">
       <h5>{{ person.nome }}</h5>
       <div>{{ person.cpf }}</div>
